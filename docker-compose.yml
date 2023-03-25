@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+  gateway-api:
+    container_name: ${GATEWAY_API_DOCKER_COMPOSE_CONTAINER_NAME}
+    image: ${GATEWAY_API_DOCKER_COMPOSE_IMAGE_NAME}
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+      - "50053:50053"
+    volumes:
+      - ./.env:/app/.env

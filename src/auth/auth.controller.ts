@@ -9,20 +9,28 @@ import {
   Headers,
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Observable } from 'rxjs';
 import {
   AuthServiceClient,
   RegisterResponse,
-  RegisterRequest,
   AUTH_SERVICE_NAME,
-  LoginRequest,
   LoginResponse,
   ProfileResponse,
   ResetRequest,
   ResetResponse,
 } from './auth.pb';
 import { createGrpcMetadata } from 'src/core/utils/metadata.util';
+import { JwtResponseDto } from './dto/jwt-response-dto';
+import { CreateUserDto } from './dto/create-user-dto';
+import { LoginUserDto } from './dto/login-user-dto';
 
+@ApiTags('Авторизация')
 @Controller('auth')
 export class AuthController implements OnModuleInit {
   private svc: AuthServiceClient;
@@ -36,18 +44,23 @@ export class AuthController implements OnModuleInit {
 
   @Post('register')
   private async register(
-    @Body() body: RegisterRequest,
+    @Body() body: CreateUserDto,
   ): Promise<Observable<RegisterResponse>> {
     return this.svc.register(body);
   }
 
+  @ApiOperation({ summary: 'Логин юзера' })
+  @ApiResponse({ status: 201, type: JwtResponseDto })
   @Post('login')
   private async login(
-    @Body() body: LoginRequest,
+    @Body() body: LoginUserDto,
   ): Promise<Observable<LoginResponse>> {
     return this.svc.login(body);
   }
 
+  @ApiOperation({ summary: 'Профайл юзера' })
+  @ApiResponse({ status: 200 })
+  @ApiBearerAuth('JWT-auth')
   @Get('profile')
   private async profile(
     @Headers() headers: IncomingHttpHeaders,

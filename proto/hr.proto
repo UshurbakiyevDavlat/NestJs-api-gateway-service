@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package hr;
+
+import "google/protobuf/empty.proto";
+
+// Protobuffers definition for the auth service
+// we will modify as we go
+
+service HrService {
+  rpc GetEmployee (GetEmployeeRequest) returns (GetEmployeeResponse) {}
+  rpc GetEmployees (google.protobuf.Empty) returns (GetEmployeesResponse) {}
+  rpc CreateEmployee (CreateEmployeeRequest) returns (CreateEmployeeResponse) {}
+  rpc CreateEmployeeAddition (CreateEmployeeAdditionRequest) returns (CreateEmployeeAdditionResponse) {}
+  rpc GetEmployeeAdditions (GetEmployeeAdditionRequest) returns (GetEmployeeAdditionsResponse) {}
+}
+
+message GetEmployeeRequest {
+  int32 id = 1;
+}
+
+message GetEmployeeResponse {
+  int32 id = 1;
+  string name = 2;
+  string surname = 3;
+  string secondName = 4;
+  bool sex = 5;
+  string address = 6;
+  string phone = 7;
+  int32 marriageId = 8;
+  int32 militaryId = 9;
+  int32 statusId = 10;
+  int32 userId = 11;
+  int32 employeeAddId = 12;
+}
+
+message GetEmployeesResponse {
+  repeated GetEmployeeResponse employees = 1;
+}
+
+message CreateEmployeeResponse {
+  GetEmployeeResponse employee = 1;
+}
+
+message CreateEmployeeRequest {
+  string name = 1;
+  string surname = 2;
+  string secondName = 3;
+  bool sex = 4;
+  string address = 5;
+  string phone = 6;
+  int32 marriageId = 7;
+  int32 militaryId = 8;
+  int32 statusId = 9;
+  int32 userId = 10;
+  int32 employeeAddId = 11;
+}
+
+message GetEmployeeAdditionRequest {
+  int32 id = 1;
+}
+
+message GetEmployeeAdditionResponse {
+  int32 id = 1;
+  int32 departmentId = 2;
+  int32 positionId = 3;
+  int32 levelId = 4;
+  int32 headId = 5;
+  int32 contractId = 6;
+  int32 workFormatId = 7;
+  int32 medCertStatus = 8;
+  string salaryAfterProbation = 9;
+  string startDate = 10;
+  string periodProbation = 11;
+}
+
+message GetEmployeeAdditionsResponse {
+  repeated GetEmployeeAdditionResponse employeeAdditions = 1;
+}
+
+message CreateEmployeeAdditionRequest {
+  int32 departmentId = 1;
+  int32 positionId = 2;
+  int32 levelId = 3;
+  int32 headId = 4;
+  int32 contractId = 5;
+  int32 workFormatId = 6;
+  int32 medCertStatus = 7;
+  string salaryAfterProbation = 8;
+  string startDate = 9;
+  string periodProbation = 10;
+}
+
+message CreateEmployeeAdditionResponse {
+  GetEmployeeAdditionResponse employeeAddition = 1;
+}

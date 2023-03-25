@@ -19,7 +19,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "proto:generate": "npx protoc --plugin=node_modules/.bin/protoc-gen-ts_proto -I=./proto --ts_proto_out=src/auth/ proto/auth.proto --ts_proto_opt=nestJs=true --ts_proto_opt=fileSuffix=.pb"
+    "proto:generate": "npx protoc --plugin=node_modules/.bin/protoc-gen-ts_proto -I=./proto --ts_proto_out=src/grpc/ proto/auth.proto --ts_proto_opt=nestJs=true --ts_proto_opt=fileSuffix=.pb"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.8.8",
@@ -29,8 +29,11 @@
     "@nestjs/microservices": "8.4.1",
     "@nestjs/passport": "^9.0.3",
     "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/swagger": "^6.2.1",
+    "@types/cookie-parser": "^1.4.3",
     "class-validator": "^0.14.0",
     "connection-string": "^4.3.6",
+    "cookie-parser": "^1.4.6",
     "getenv": "^1.0.0",
     "long": "^5.2.1",
     "nestjs-http-exception-filter": "^1.0.6",

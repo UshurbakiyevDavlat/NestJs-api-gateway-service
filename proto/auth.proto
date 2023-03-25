@@ -3,6 +3,7 @@ syntax = "proto3";
 package auth;
 
 import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
 
 // Protobuffers definition for the auth service
 // we will modify as we go
@@ -13,6 +14,8 @@ service AuthService {
   rpc Validate (ValidateRequest) returns (ValidateResponse) {}
   rpc Profile(google.protobuf.Empty) returns (ProfileResponse) {};
   rpc Reset(ResetRequest) returns (ResetResponse) {};
+  rpc CreateRole (RoleRequest) returns (RoleResponse) {}
+  rpc ListRoles(google.protobuf.Empty) returns (ListRolesResponse) {};
 }
 
 // Register
@@ -23,9 +26,21 @@ message RegisterRequest {
   int32 role_id = 3;
 }
 
+message User {
+  int32 id = 1;
+  string email = 2;
+  int32 roleId = 3;
+  string createdAt = 4;
+  string updatedAt = 5;
+  string deletedAt = 6;
+}
+
 message RegisterResponse {
   int32 status = 1;
-  repeated string message = 2;
+  oneof message {
+    string errorMessage = 2;
+    User user = 3;
+  }
 }
 
 // Login
@@ -54,6 +69,7 @@ message ValidateResponse {
 }
 
 // Profile
+
 message ProfileRequest {
   string email = 1;
 }
@@ -63,6 +79,7 @@ message ProfileResponse {
   int32 role_id = 2;
 }
 
+
 message ResetRequest {
   string email = 1;
   string password = 2;
@@ -70,4 +87,19 @@ message ResetRequest {
 
 message ResetResponse {
   string message = 1;
+}
+
+message RoleRequest {
+  string title = 1;
+}
+
+message RoleResponse {
+  string title = 1;
+  string createdAt = 2;
+  string updatedAt = 3;
+  string deletedAt = 4;
+}
+
+message ListRolesResponse {
+  repeated RoleResponse roles = 1;
 }

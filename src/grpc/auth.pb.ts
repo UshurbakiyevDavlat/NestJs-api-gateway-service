@@ -5,25 +5,25 @@ import { Empty } from './google/protobuf/empty.pb';
 
 export const protobufPackage = 'auth';
 
-export interface User {
-  id: number;
-  email: string;
-  roleId: number;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date | undefined | null;
-}
-
 export interface RegisterRequest {
   email: string;
   password: string;
   roleId: number;
 }
 
+export interface User {
+  id: number;
+  email: string;
+  roleId: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
+}
+
 export interface RegisterResponse {
   status: number;
-  errorMessage?: string | null;
-  user?: User | null;
+  errorMessage?: string | undefined;
+  user?: User | undefined;
 }
 
 export interface LoginRequest {
@@ -65,6 +65,21 @@ export interface ResetResponse {
   message: string;
 }
 
+export interface RoleRequest {
+  title: string;
+}
+
+export interface RoleResponse {
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
+}
+
+export interface ListRolesResponse {
+  roles: RoleResponse[];
+}
+
 export const AUTH_PACKAGE_NAME = 'auth';
 
 export interface AuthServiceClient {
@@ -74,9 +89,13 @@ export interface AuthServiceClient {
 
   validate(request: ValidateRequest): Observable<ValidateResponse>;
 
-  profile(request: Empty, ...rest: any): Observable<ProfileResponse>;
+  profile(request: Empty): Observable<ProfileResponse>;
 
   reset(request: ResetRequest): Observable<ResetResponse>;
+
+  createRole(request: RoleRequest): Observable<RoleResponse>;
+
+  listRoles(request: Empty): Observable<ListRolesResponse>;
 }
 
 export interface AuthServiceController {
@@ -100,12 +119,22 @@ export interface AuthServiceController {
 
   profile(
     request: Empty,
-    ...rest: any
   ): Promise<ProfileResponse> | Observable<ProfileResponse> | ProfileResponse;
 
   reset(
     request: ResetRequest,
   ): Promise<ResetResponse> | Observable<ResetResponse> | ResetResponse;
+
+  createRole(
+    request: RoleRequest,
+  ): Promise<RoleResponse> | Observable<RoleResponse> | RoleResponse;
+
+  listRoles(
+    request: Empty,
+  ):
+    | Promise<ListRolesResponse>
+    | Observable<ListRolesResponse>
+    | ListRolesResponse;
 }
 
 export function AuthServiceControllerMethods() {
@@ -116,6 +145,8 @@ export function AuthServiceControllerMethods() {
       'validate',
       'profile',
       'reset',
+      'createRole',
+      'listRoles',
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(
